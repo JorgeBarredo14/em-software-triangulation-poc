@@ -38,8 +38,9 @@ project from which the data are drawn.
 - Calibration profiles tied to the specific probe and SoC layout.
 - Firmware binaries used as fuzzing targets.
 
-These items are covered by an industrial NDA and cannot be
-redistributed.
+These items are not redistributable for reasons of size and
+intellectual-property constraints typical of industrial
+collaboration.
 
 ## Visual evidence anonymisation
 

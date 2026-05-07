@@ -20,8 +20,9 @@ tables and figures, three standalone Python scripts that depend only on
 through the paper's claims one by one. The artefact does not provide
 the raw electromagnetic traces, the per-input `callgrind` and `perf`
 profiles, the calibration profiles tied to the specific probe and SoC
-layout, or the firmware binaries used as fuzzing targets. These are
-covered by an industrial NDA.
+layout, or the firmware binaries used as fuzzing targets. These items
+are not redistributable as raw data due to size and intellectual-property
+constraints typical of industrial collaboration.
 
 ## Repository structure
 
@@ -52,12 +53,13 @@ quantitative claims. Two scope statements apply:
   cross-modal agreement against an independent software view, not
   through held-out classification accuracy.
 
-The raw EM traces are not included in the repository because of size
-and the industrial NDA covering the capture infrastructure. The CSV
-loaded by the demonstrator notebooks (`data/picoc_features.csv`) is
-shipped pre-populated; reviewers wishing to regenerate it from their
-own captures can run `scripts/extract_features_from_waveforms.py`
-following the format described in
+The raw EM traces are not included in the repository for reasons of
+size and intellectual-property constraints on the capture
+infrastructure. The CSV loaded by the demonstrator notebooks
+(`data/picoc_features.csv`) is shipped pre-populated; reviewers
+wishing to regenerate it from their own captures can run
+`scripts/extract_features_from_waveforms.py` following the format
+described in
 [`docs/EM_METHODOLOGY.md`](docs/EM_METHODOLOGY.md).
 
 ## Repository layout
@@ -233,10 +235,11 @@ exclusive-bug counts.
 - Calibration profiles tied to the specific probe and SoC layout.
 - Firmware binaries used as fuzzing targets.
 
-The aggregated CSVs in this artefact are derived from these proprietary
+The aggregated CSVs in this artefact are derived from those source
 artefacts. The derivation pipeline depends on instrumentation
-infrastructure that cannot be released under the industrial NDA
-governing the study.
+infrastructure that is not redistributable as raw data due to size
+and intellectual-property constraints typical of industrial
+collaboration.
 
 ## Licence
 

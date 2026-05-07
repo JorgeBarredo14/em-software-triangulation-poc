@@ -84,8 +84,8 @@ density of the fuzzing campaign, not an EM-deviation rate.
 ## Reproducing the demonstrator
 
 1. Acquire raw `.npz` traces. They are not included in this
-   repository because of size and because they are covered by the
-   industrial NDA governing the study.
+   repository for reasons of size and intellectual-property
+   constraints typical of industrial collaboration.
 2. Run the feature-extraction script:
 
    ```
@@ -125,6 +125,20 @@ The provided `Dockerfile` installs all of these. For a local install:
 ```
 pip install pandas scikit-learn pikepdf pypdf
 ```
+
+## Why only picoc, and not html2xhtml
+
+The visual demonstrator includes only a picoc capture. The reason is
+practical: picoc exercises a single vulnerability trigger over a
+tractable trace count and produces per-trace EM signatures dominated
+by one execution regime at a time, which keeps the per-trace
+visualisations and the descriptive statistics interpretable. The
+html2xhtml campaigns analysed in the paper interleave allocation
+bursts with I/O waits, so the underlying signal alternates between
+two subsystems within each input. Per-trace visualisation under that
+joint-pressure regime is far less informative without the agreement
+rule of Section 2.4 of the paper, which is itself reproduced in
+notebook `01` rather than re-implemented here.
 
 ## Relationship to the paper
 
