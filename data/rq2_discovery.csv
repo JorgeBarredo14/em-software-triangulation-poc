@@ -1,0 +1,4 @@
+campaign,bugs_em,bugs_base,seeds_em,seeds_base,p_excl,wilson_low,wilson_high,prod_crash_em,prod_crash_base
+C2,2,1,14,1,0.50,0.095,0.905,2.79,1.00
+C3,2,2,12,11,0.00,0.000,0.658,1.42,1.09
+picoc,4,1,97,1,0.75,0.301,0.954,3.21,1.00

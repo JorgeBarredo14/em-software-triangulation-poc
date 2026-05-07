@@ -1,0 +1,4 @@
+campaign,duration_h,r_bug_em,r_bug_base,mttfb_em_s,mttfb_base_s,early_by_em_num,early_by_em_den,median_advantage_s
+C2,4.88,0.41,0.21,3.2,4.6,1,1,3.5
+C3,4.11,0.49,0.49,5.2,5.6,1,2,0.3
+picoc,4.93,0.81,0.20,1.9,2.9,1,1,2.9

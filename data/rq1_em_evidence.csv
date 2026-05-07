@@ -1,0 +1,16 @@
+campaign,band,subsystem_label,count,percentage
+C2,High,IO,1,11.1
+C2,Mid,Memory,0,0.0
+C2,Low,CPU,1,11.1
+C2,Weak,Compute,6,66.7
+C2,Clock,Clk,1,11.1
+C3,High,IO,4,40.0
+C3,Mid,Memory,6,60.0
+C3,Low,CPU,0,0.0
+C3,Weak,Compute,0,0.0
+C3,Clock,Clk,0,0.0
+picoc,High,IO,6,12.8
+picoc,Mid,Memory,13,27.7
+picoc,Low,CPU,0,0.0
+picoc,Weak,Compute,27,57.4
+picoc,Clock,Clk,1,2.1
