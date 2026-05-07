@@ -130,8 +130,22 @@ def extract_harmonics(blob) -> dict[str, float | str]:
     return out
 
 
+def get_optional(data, key: str):
+    """Return the scalar value of ``key`` if present, otherwise an empty string."""
+    if key in data.files:
+        return coerce_scalar(data[key])
+    return ""
+
+
 def extract_one(npz_path: Path, campaign_phase: str) -> dict | None:
-    """Return one row of features for an .npz file, or None on failure."""
+    """Return one row of features for an .npz file, or None on failure.
+
+    The required fields are ``exit_code``, ``duration``, ``sample_rate``,
+    ``raw_stats``, ``fft_stats``, and ``harmonics``. ``median_rms`` is
+    optional because it only exists in operation-phase traces (the
+    calibration phase records single-shot traces rather than medians
+    across repetitions, so the field is undefined there).
+    """
     try:
         data = np.load(npz_path, allow_pickle=True)
     except Exception as exc:
@@ -141,13 +155,13 @@ def extract_one(npz_path: Path, campaign_phase: str) -> dict | None:
     try:
         exit_code = coerce_scalar(data["exit_code"])
         duration = coerce_scalar(data["duration"])
-        median_rms = coerce_scalar(data["median_rms"])
         sample_rate = coerce_scalar(data["sample_rate"])
+        median_rms = get_optional(data, "median_rms")
         raw_stats = extract_dict(data["raw_stats"], RAW_STAT_FIELDS)
         fft_stats = extract_dict(data["fft_stats"], FFT_STAT_FIELDS)
         harmonics = extract_harmonics(data["harmonics"])
     except KeyError as exc:
-        logging.warning("missing key in %s: %s", npz_path.name, exc)
+        logging.warning("missing required key in %s: %s", npz_path.name, exc)
         return None
     except Exception as exc:
         logging.warning("could not parse %s: %s", npz_path.name, exc)

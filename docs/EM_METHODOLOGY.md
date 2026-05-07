@@ -82,12 +82,14 @@ beyond those used by the reproducibility artefact:
 
 - `pandas` (load and inspect the feature CSV)
 - `scikit-learn` (PCA, t-SNE, and the baseline random forest)
-- `pypdf` (only for `strip_pdf_metadata.py`)
+- `pikepdf` and `pypdf` (only for `strip_pdf_metadata.py`: pikepdf
+  performs metadata stripping and content-stream redaction; pypdf is
+  used for the post-write text-extraction self-check)
 
 The provided `Dockerfile` installs all of these. For a local install:
 
 ```
-pip install pandas scikit-learn pypdf
+pip install pandas scikit-learn pikepdf pypdf
 ```
 
 ## Relationship to the paper

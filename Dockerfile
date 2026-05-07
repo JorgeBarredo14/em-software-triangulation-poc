@@ -8,6 +8,7 @@ RUN pip install --no-cache-dir \
     jupyter==1.0.0 \
     "pandas>=2.0" \
     "scikit-learn>=1.3" \
+    "pikepdf>=8.0" \
     "pypdf>=3.0" \
  && rm -rf /root/.cache/pip
 
