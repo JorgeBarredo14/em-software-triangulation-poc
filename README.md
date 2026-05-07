@@ -25,29 +25,40 @@ covered by an industrial NDA.
 
 ## Repository structure
 
-This repository serves two complementary purposes.
+The repository contains two layers with different purposes.
 
 **Reproducibility artefact** (`notebooks/01`-`04`, `data/*.csv`,
-`scripts/compute_*.py`): reproduces the aggregated metrics, tables,
-and figures reported in the paper across the three campaigns
-(`C2`, `C3`, `picoc`). This is the part a reviewer reads first.
+`scripts/compute_*.py`): reproduces the per-campaign tables and
+figures reported in the paper. The aggregated CSVs under `data/` are
+the direct inputs of Tables 1, 3, 4, and 5 and Figure 2. The
+verification scripts re-derive the certainty rate and the Wilson 95%
+confidence intervals from first principles. The reviewer-facing
+content of the paper's Sections 4 and 5 is reproduced here.
 
 **Visual demonstrator** (`notebooks/05`-`07`, `figures/em_evidence/`,
-`docs/EM_METHODOLOGY.md`): illustrates the EM-software triangulation
-methodology on a standalone capture from the picoc target. The
-numerical figures in this section (number of traces, cluster counts,
-classifier scores) are *not* intended to replicate the paper's
-reported metrics; they exist to show how the methodology operates
-end-to-end on real captured traces.
+`docs/EM_METHODOLOGY.md`): walks through one EM acquisition end to
+end so a reviewer can see what a raw capture and its derived feature
+CSV look like in practice. It is not a reproduction of the paper's
+quantitative claims. Two scope statements apply:
 
-The raw EM traces (~17 GB) are not included in this repository.
-Researchers wishing to reproduce the visual demonstrator from raw
-data can run `scripts/extract_features_from_waveforms.py` against
-their own captures, following the format described in
-[`docs/EM_METHODOLOGY.md`](docs/EM_METHODOLOGY.md). The feature CSV
-that the demonstrator notebooks load is `data/picoc_features.csv`,
-which is shipped as an empty placeholder and populated by that
-script.
+- The picoc capture used here is from a fuzzing campaign with a
+  different vulnerability target than the picoc campaign in the
+  paper. Per-trace counts, crash density, and cluster counts
+  therefore do not match the paper.
+- The classifier trained in notebook `07` predicts crash vs no-crash
+  on the wider raw feature set captured by the pipeline. The paper's
+  classifier (Section 2.2) instead predicts a coarse subsystem label
+  on a four-features-per-band subset and is evaluated through
+  cross-modal agreement against an independent software view, not
+  through held-out classification accuracy.
+
+The raw EM traces are not included in the repository because of size
+and the industrial NDA covering the capture infrastructure. The CSV
+loaded by the demonstrator notebooks (`data/picoc_features.csv`) is
+shipped pre-populated; reviewers wishing to regenerate it from their
+own captures can run `scripts/extract_features_from_waveforms.py`
+following the format described in
+[`docs/EM_METHODOLOGY.md`](docs/EM_METHODOLOGY.md).
 
 ## Repository layout
 
@@ -98,8 +109,20 @@ Required: Python 3.9 or later.
 
 ### Step 2 — Install dependencies
 
+The paper-replicating notebooks (`01`-`04`) and the verification
+scripts depend on `numpy`, `matplotlib`, and `jupyter` only:
+
 ```
 pip install numpy matplotlib jupyter
+```
+
+The visual demonstrator notebooks (`05`-`07`) and the helper scripts
+under `scripts/extract_features_from_waveforms.py` and
+`scripts/strip_pdf_metadata.py` additionally require `pandas`,
+`scikit-learn`, `pikepdf`, and `pypdf`:
+
+```
+pip install pandas scikit-learn pikepdf pypdf
 ```
 
 Or, if using a virtual environment:
@@ -107,7 +130,7 @@ Or, if using a virtual environment:
 ```
 python -m venv venv
 source venv/bin/activate            # on Windows: venv\Scripts\activate
-pip install numpy matplotlib jupyter
+pip install numpy matplotlib jupyter pandas scikit-learn pikepdf pypdf
 ```
 
 ### Step 3 — Run the verification scripts
@@ -150,9 +173,12 @@ picoc             [0.301, 0.954]        [0.301, 0.954]
 jupyter notebook notebooks/
 ```
 
-Open the four notebooks in order. Each notebook is self-contained;
-running all cells reproduces the corresponding tables or figures from
-the paper.
+Notebooks `01`-`04` reproduce the paper's tables and figures and are
+self-contained: running all cells in any one of them produces the
+corresponding artefact in the paper. Notebooks `05`-`07` are the
+visual demonstrator and require the additional dependencies of
+Step 2 plus the populated `data/picoc_features.csv` and
+`figures/em_evidence/` (both shipped with the repository).
 
 ### Step 5 (optional) — Use the Docker image
 
@@ -168,12 +194,23 @@ the three verification scripts as a build-time check.
 
 ## Notebook reference
 
+Paper-replicating notebooks:
+
 | Notebook | Reproduces |
 |---|---|
 | `01_reproduce_rq1_matrices.ipynb` | Figure 2 (EM x SW agreement matrices) and Table 1 (R_certain per campaign) |
 | `02_reproduce_rq2_tables.ipynb` | Tables 3 and 4 (RQ2 discovery and efficiency dimensions) |
-| `03_seed_ratio_predictor.ipynb` | The seed-count ratio observation in Section 5.3.4 |
-| `04_diagnostic_pattern_C3.ipynb` | The R_certain + p_excl diagnostic pattern in Section 6.2 |
+| `03_seed_ratio_predictor.ipynb` | The seed-count ratio observation in Section 4.3.4 |
+| `04_diagnostic_pattern_C3.ipynb` | The R_certain + p_excl diagnostic pattern in Section 5.2 |
+
+Visual demonstrator notebooks (run on a separate capture, not a
+reproduction of the paper's metrics):
+
+| Notebook | Shows |
+|---|---|
+| `05_em_visual_evidence.ipynb` | Capture setup, descriptive statistics, calibration profile, and mean-trace-by-exit-code reference figure |
+| `06_em_feature_space.ipynb` | PCA and t-SNE projections of the 21 raw features by exit-code label, plus reference figures from the capture pipeline |
+| `07_em_diagnostics.ipynb` | Reference figures from the capture pipeline (feature importance, detection metrics, anomaly distribution) and a baseline random-forest sanity check |
 
 ## Data files
 
