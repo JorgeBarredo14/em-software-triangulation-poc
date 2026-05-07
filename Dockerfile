@@ -6,6 +6,9 @@ RUN pip install --no-cache-dir \
     numpy==1.26.4 \
     matplotlib==3.8.4 \
     jupyter==1.0.0 \
+    "pandas>=2.0" \
+    "scikit-learn>=1.3" \
+    "pypdf>=3.0" \
  && rm -rf /root/.cache/pip
 
 COPY . /artefact/

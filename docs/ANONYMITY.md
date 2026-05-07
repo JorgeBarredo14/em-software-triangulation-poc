@@ -41,6 +41,33 @@ project from which the data are drawn.
 These items are covered by an industrial NDA and cannot be
 redistributed.
 
+## Visual evidence anonymisation
+
+The PDFs under `figures/em_evidence/` are processed with
+`scripts/strip_pdf_metadata.py` before they enter the repository. The
+script copies each page into a fresh writer and replaces the document
+information dictionary with an empty one, removing the `Author`,
+`Creator`, and `CreationDate` fields that the original capture
+pipeline emitted (the `CreationDate` in particular was in Madrid time
+zone and would have been identifying). The only field still present
+in the output is `/Producer`, which is re-emitted by the PDF writer
+and contains no identifying information.
+
+Filenames are also remapped: capture-time timestamps and any
+reference to a specific vulnerability identifier in the source name
+are absorbed by glob wildcards in the matching rules of the script,
+and the output is written under a neutral name of the form
+`em_<topic>.pdf`. The matching rules themselves do not contain any
+identifying substrings.
+
+The feature CSV at `data/picoc_features.csv` is produced by
+`scripts/extract_features_from_waveforms.py`, which deliberately
+excludes the raw `signal` and `processed_signal` arrays as well as the
+per-trace `timestamp`, `file_id`, `execution_number`, `vertical_gain`,
+and `vertical_offset` fields. Only derived statistical features are
+written. The CSV contains nothing that could be tied to a specific
+capture run.
+
 ## Reporting an identifying leak
 
 If any identifying information is found anywhere in this repository,

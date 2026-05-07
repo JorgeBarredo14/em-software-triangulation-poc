@@ -23,6 +23,32 @@ profiles, the calibration profiles tied to the specific probe and SoC
 layout, or the firmware binaries used as fuzzing targets. These are
 covered by an industrial NDA.
 
+## Repository structure
+
+This repository serves two complementary purposes.
+
+**Reproducibility artefact** (`notebooks/01`-`04`, `data/*.csv`,
+`scripts/compute_*.py`): reproduces the aggregated metrics, tables,
+and figures reported in the paper across the three campaigns
+(`C2`, `C3`, `picoc`). This is the part a reviewer reads first.
+
+**Visual demonstrator** (`notebooks/05`-`07`, `figures/em_evidence/`,
+`docs/EM_METHODOLOGY.md`): illustrates the EM-software triangulation
+methodology on a standalone capture from the picoc target. The
+numerical figures in this section (number of traces, cluster counts,
+classifier scores) are *not* intended to replicate the paper's
+reported metrics; they exist to show how the methodology operates
+end-to-end on real captured traces.
+
+The raw EM traces (~17 GB) are not included in this repository.
+Researchers wishing to reproduce the visual demonstrator from raw
+data can run `scripts/extract_features_from_waveforms.py` against
+their own captures, following the format described in
+[`docs/EM_METHODOLOGY.md`](docs/EM_METHODOLOGY.md). The feature CSV
+that the demonstrator notebooks load is `data/picoc_features.csv`,
+which is shipped as an empty placeholder and populated by that
+script.
+
 ## Repository layout
 
 ```
@@ -37,18 +63,27 @@ em-software-triangulation-poc/
 │   ├── rq1_em_evidence.csv
 │   ├── rq2_discovery.csv
 │   ├── rq2_efficiency.csv
-│   └── ablation.csv
-├── notebooks/                         # reproducibility notebooks
+│   ├── ablation.csv
+│   └── picoc_features.csv             # placeholder; populated by extract_features_from_waveforms.py
+├── notebooks/                         # reproducibility + visual demonstrator
 │   ├── 01_reproduce_rq1_matrices.ipynb
 │   ├── 02_reproduce_rq2_tables.ipynb
 │   ├── 03_seed_ratio_predictor.ipynb
-│   └── 04_diagnostic_pattern_C3.ipynb
-├── scripts/                           # standalone verification scripts
+│   ├── 04_diagnostic_pattern_C3.ipynb
+│   ├── 05_em_visual_evidence.ipynb
+│   ├── 06_em_feature_space.ipynb
+│   └── 07_em_diagnostics.ipynb
+├── scripts/                           # standalone scripts
 │   ├── compute_certainty_rates.py
 │   ├── compute_pexcl_wilson.py
-│   └── plot_matrices.py
+│   ├── plot_matrices.py
+│   ├── extract_features_from_waveforms.py
+│   └── strip_pdf_metadata.py
+├── figures/
+│   └── em_evidence/                   # populated by strip_pdf_metadata.py
 └── docs/
-    └── ANONYMITY.md
+    ├── ANONYMITY.md
+    └── EM_METHODOLOGY.md
 ```
 
 ## Quick start
